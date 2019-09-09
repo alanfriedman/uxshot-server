@@ -65,7 +65,7 @@ app.get('/', function (req, res) {
         <p>Instantly screen capture and record in-browser.</p>
         <h2>Demo</h2>
         <p>Press <code>ctrl+s</code> to screenshot or <code>ctrl+r</code> to record your screen.</p>
-        <p>Copy the link from the popup. It will look like this: <a href="https://uxshot.com/NGEZloy.png">https://uxshot.com/NGEZloy.png</a></p>
+        <p>Copy the link from the popup. It will look like this: <a href="https://uxshot.com/NGEZloy.png">uxshot.com/NGEZloy.png</a></p>
         <h2>Usage</h2>
         <p>Find <a href="https://www.npmjs.com/package/uxshot">installation and usage docs</a> on NPM.</p>
         <script>uxshot();</script>
