@@ -43,7 +43,32 @@ app.use((req, res, next) => {
 })
 
 app.get('/', function (req, res) {
-  res.send('hello world');
+  res.send(`
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>uxshot - instantly screen capture in-browser</title>
+        <script src="https://unpkg.com/uxshot@0.0.11/dist/uxshot.js"></script>
+        <style>
+          body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+            font-size: 14px;
+            line-height: 1.5;
+          }
+        </style>
+      </head>
+      <body>
+        <h1>uxshot</h1>
+        <p>Instantly screen capture and record in-browser.</p>
+        <h2>Demo</h2>
+        <p>Press <code>ctrl+s</code> to screenshot or <code>ctrl+r</code> to record your screen.</p>
+        <p>Copy the link from the popup. It will look like this: <a href="https://uxshot.com/NGEZloy.png">https://uxshot.com/NGEZloy.png</a></p>
+        <h2>Usage</h2>
+        <p>Find <a href="https://www.npmjs.com/package/uxshot">installation and usage docs</a> on NPM.</p>
+        <script>uxshot();</script>
+      </body>
+    </html>
+  `);
 });
 
 app.get('/:mediaPath', function (req, res) {
