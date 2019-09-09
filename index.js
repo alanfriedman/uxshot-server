@@ -7,6 +7,7 @@ const multer = require('multer');
 const AWS = require('aws-sdk')
 const shortid = require('shortid');
 const cors = require('cors')
+const request = require('request');
 
 var s3 = new AWS.S3();
 
@@ -20,6 +21,14 @@ app.use(express.urlencoded({ extended: true })) // for parsing application/x-www
 var storage = multer.memoryStorage()
 
 const upload = multer({storage });
+
+function getVideoPathFromId(id) {
+  return `https://uirecorder.s3.amazonaws.com/assets/${id}.webm`
+}
+
+function getVideoProxyPathFromId(id) {
+  return `https://browserfilm.herokuapp.com/${id}`
+}
 
 app.use((req, res, next) => {
   if (process.env.NODE_ENV === 'production') {
@@ -37,6 +46,10 @@ app.get('/', function (req, res) {
   res.send('hello world');
 });
 
+app.get('/:videoId', function (req, res) {
+  request(getVideoPathFromId(req.params.videoId)).pipe(res);
+});
+
 app.post('/upload', upload.single('video'), (req, res) => {
 
   const filename = shortid.generate();
@@ -45,19 +58,17 @@ app.post('/upload', upload.single('video'), (req, res) => {
     ACL: "public-read", 
     Body: req.file.buffer, 
     Bucket: "uirecorder", 
-    Key: "assets/" + filename + '.webm',
+    Key: `assets/${filename}.webm`,
     ContentType: 'video/webm'
    };
 
    s3.putObject(params, function(err, data) {
     if (err) {
-      console.log(err, err.stack);
       res.sendStatus(500);
     }else{
-      console.log('https://uirecorder.s3.amazonaws.com/assets/' + filename + '.webm');
       res.json({
         data: {
-          url: 'https://uirecorder.s3.amazonaws.com/assets/' + filename + '.webm'
+          url: getVideoProxyPathFromId(filename)
         }
       });
     }
