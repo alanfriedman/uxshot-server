@@ -22,12 +22,12 @@ var storage = multer.memoryStorage()
 
 const upload = multer({storage });
 
-function getVideoPathFromId(id) {
-  return `https://uirecorder.s3.amazonaws.com/assets/${id}.webm`
+function getMediaPath(path) {
+  return `https://uirecorder.s3.amazonaws.com/assets/${path}`
 }
 
-function getVideoProxyPathFromId(id) {
-  return `uxshot.com/${id}`
+function getMediaProxyPathFromId(path) {
+  return `uxshot.com/${path}`
 }
 
 app.use((req, res, next) => {
@@ -46,20 +46,25 @@ app.get('/', function (req, res) {
   res.send('hello world');
 });
 
-app.get('/:videoId', function (req, res) {
-  request(getVideoPathFromId(req.params.videoId)).pipe(res);
+app.get('/:mediaPath', function (req, res) {
+  request(getMediaPath(req.params.mediaPath)).pipe(res);
 });
 
-app.post('/upload', upload.single('video'), (req, res) => {
+app.post('/upload', upload.single('media'), (req, res) => {
+  const {mediaType, media} = req.body;
 
   const filename = shortid.generate();
+
+  const isVideo = mediaType === 'video';
+
+  const extension = isVideo ? '.webm' : '.png'
 
    var params = {
     ACL: "public-read", 
     Body: req.file.buffer, 
     Bucket: "uirecorder", 
-    Key: `assets/${filename}.webm`,
-    ContentType: 'video/webm'
+    Key: `assets/${filename}${extension}`,
+    ContentType: isVideo ? 'video/webm' : 'image/png',
    };
 
    s3.putObject(params, function(err, data) {
@@ -68,7 +73,7 @@ app.post('/upload', upload.single('video'), (req, res) => {
     }else{
       res.json({
         data: {
-          url: getVideoProxyPathFromId(filename)
+          url: getMediaProxyPathFromId(`${filename}${extension}`)
         }
       });
     }
