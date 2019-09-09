@@ -49,6 +49,9 @@ app.get('/', function (req, res) {
       <head>
         <title>uxshot - instantly screen capture in-browser</title>
         <script src="https://unpkg.com/uxshot@0.0.11/dist/uxshot.js"></script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="Instantly screen capture and record in-browser">
         <style>
           body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
