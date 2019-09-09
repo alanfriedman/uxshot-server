@@ -27,7 +27,7 @@ function getVideoPathFromId(id) {
 }
 
 function getVideoProxyPathFromId(id) {
-  return `https://browserfilm.com/${id}`
+  return `uxshot.com/${id}`
 }
 
 app.use((req, res, next) => {
