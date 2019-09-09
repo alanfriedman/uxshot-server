@@ -27,7 +27,7 @@ function getVideoPathFromId(id) {
 }
 
 function getVideoProxyPathFromId(id) {
-  return `https://browserfilm.herokuapp.com/${id}`
+  return `https://browserfilm.com/${id}`
 }
 
 app.use((req, res, next) => {
