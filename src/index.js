@@ -2,12 +2,11 @@ require('dotenv').config();
 const express = require('express')
 const app = express()
 const port = process.env.PORT || 3000
-var cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser')
 const multer = require('multer');
 const AWS = require('aws-sdk')
 const shortid = require('shortid');
 const cors = require('cors')
-const request = require('request');
 const {query} = require('./db');
 const exphbs = require('express-handlebars');
 const createDOMPurify = require('dompurify');
@@ -16,7 +15,7 @@ const { JSDOM } = require('jsdom');
 const jsDomWindow = (new JSDOM('')).window;
 const DOMPurify = createDOMPurify(jsDomWindow);
 
-var s3 = new AWS.S3();
+const s3 = new AWS.S3();
 
 app.use(cors())
 
@@ -46,7 +45,7 @@ app.engine(
 app.set('views', 'views/pages/');
 app.set('view engine', 'hbs');
 
-var storage = multer.memoryStorage()
+const storage = multer.memoryStorage()
 const upload = multer({storage });
 
 function getMediaPath(path, type) {
@@ -96,7 +95,7 @@ app.post('/upload', upload.single('media'), (req, res) => {
 
   const extension = isVideo ? '.webm' : '.png'
 
-   var params = {
+   const params = {
     ACL: "public-read", 
     Body: req.file.buffer, 
     Bucket: "uirecorder", 
