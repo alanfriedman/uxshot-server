@@ -1,0 +1,23 @@
+<style type="text/css">
+  body {
+    background: #333;
+  }
+  video, img {
+    width: 100%;
+  }
+  .description {
+    color: white;
+  }
+</style>
+
+{{#if isVideo}}
+  <video src="{{src}}"></video>
+{{else}}
+  <img src="{{src}}">
+{{/if}}
+
+{{#if description}}
+  <pre class="description">
+    {{description}}
+  </pre>
+{{/if}}
