@@ -10,6 +10,11 @@ const cors = require('cors')
 const request = require('request');
 const {query} = require('./db');
 const exphbs = require('express-handlebars');
+const createDOMPurify = require('dompurify');
+const { JSDOM } = require('jsdom');
+
+const jsDomWindow = (new JSDOM('')).window;
+const DOMPurify = createDOMPurify(jsDomWindow);
 
 var s3 = new AWS.S3();
 
@@ -68,10 +73,15 @@ app.get('/', function (req, res) {
 app.get('/:slug', async function (req, res) {
   const [shot] = await query('select * from shots where slug = ?', req.params.slug)
   // request(getMediaPath(req.params.slug)).pipe(res);
+  if (!shot) {
+    res.sendStatus(404);
+    return;
+  }
   res.render('shot', {
     ...shot,
     isVideo: shot.type === 'video',
-    src: getMediaPath(req.params.slug, shot.type)
+    src: getMediaPath(req.params.slug, shot.type),
+    description: DOMPurify.sanitize(shot.description),
   })
 });
 
