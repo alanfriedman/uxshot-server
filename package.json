@@ -1,7 +1,7 @@
 {
-  "name": "browserfilm",
+  "name": "uxshot-server",
   "version": "1.0.0",
-  "description": "BrowserFilm",
+  "description": "uxshot server",
   "main": "index.js",
   "author": "Alan Friedman",
   "license": "MIT",
