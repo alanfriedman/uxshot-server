@@ -1,23 +1,42 @@
 <style type="text/css">
   body {
     background: #333;
+    color: white;
   }
   video, img {
     width: 100%;
   }
   .description {
     color: white;
+    white-space: pre-line;
+  }
+  .shot-wrap {
+    display: flex;
+  }
+  .media {
+    flex: 1;
+  }
+  .meta {
+    padding: 10px 10px 10px 30px;
+    flex-basis: 300px;
   }
 </style>
 
-{{#if isVideo}}
-  <video src="{{src}}" type="video/webm" controls autoplay></video>
-{{else}}
-  <img src="{{src}}">
-{{/if}}
+<div class="shot-wrap">
+  <div class="media">
+    {{#if isVideo}}
+      <video src="{{src}}" type="video/webm" controls autoplay></video>
+    {{else}}
+      <img src="{{src}}">
+    {{/if}}
+  </div>
 
-{{#if description}}
-  <pre class="description">
-    {{description}}
-  </pre>
-{{/if}}
+  <div class="meta">
+    <div>Created {{created_at}}</div>
+    {{#if description}}
+      <pre class="description">
+        {{description}}
+      </pre>
+    {{/if}}
+  </div>
+</div>
