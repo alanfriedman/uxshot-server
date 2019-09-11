@@ -10,7 +10,7 @@
     "node": "12.10.0"
   },
   "scripts": {
-    "start": "node src/index.js --experimental-modules",
+    "start": "node --experimental-modules src/index.js",
     "dev": "nodemon --experimental-modules src/index.js",
     "heroku-postbuild": "npx knex migrate:latest"
   },
