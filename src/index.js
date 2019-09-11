@@ -1,18 +1,19 @@
-require('dotenv').config();
-const express = require('express')
+import dotenv from 'dotenv';
+dotenv.config();
+import express from 'express';
 const app = express()
 const port = process.env.PORT || 3000
-const cookieParser = require('cookie-parser')
-const multer = require('multer');
-const AWS = require('aws-sdk')
-const shortid = require('shortid');
-const cors = require('cors')
-const {query} = require('./db');
-const exphbs = require('express-handlebars');
-const createDOMPurify = require('dompurify');
-const { JSDOM } = require('jsdom');
+import cookieParser from 'cookie-parser'
+import multer from 'multer';
+import AWS from 'aws-sdk'
+import shortid from 'shortid';
+import cors from 'cors'
+import {query} from './db/index.js';
+import exphbs from 'express-handlebars';
+import createDOMPurify from 'dompurify';
+import jsdom from 'jsdom';
 
-const jsDomWindow = (new JSDOM('')).window;
+const jsDomWindow = (new jsdom.JSDOM('')).window;
 const DOMPurify = createDOMPurify(jsDomWindow);
 
 const s3 = new AWS.S3();

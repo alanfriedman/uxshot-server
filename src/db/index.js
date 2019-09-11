@@ -1,6 +1,6 @@
-const knexLib = require('knex');
+import knexLib from 'knex';
 
-const knex = knexLib({
+export const knex = knexLib({
   client: 'mysql',
   connection: process.env.DATABASE_URL,
   pool: {
@@ -12,16 +12,11 @@ const knex = knexLib({
   }
 });
 
-async function query(sql, bindings = []) {
+export async function query(sql, bindings = []) {
   try {
     const result = await knex.raw(sql, bindings);
     return result[0];
   } catch (err) {
     throw new Error(err);
   }
-}
-
-module.exports = {
-  knex,
-  query
 }

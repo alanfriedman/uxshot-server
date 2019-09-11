@@ -5,9 +5,13 @@
   "main": "index.js",
   "author": "Alan Friedman",
   "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": "12.10.0"
+  },
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js",
+    "start": "node src/index.js --experimental-modules",
+    "dev": "nodemon --experimental-modules src/index.js",
     "heroku-postbuild": "npx knex migrate:latest"
   },
   "dependencies": {
