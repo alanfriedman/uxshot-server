@@ -51,5 +51,18 @@
         {{description}}
       </pre>
     {{/if}}
+
+    {{#if errors}}
+      <h4>Errors</h4>
+      <ul>
+        {{#each errors}}
+          <li>
+            <p><strong>{{message}}</strong></p>
+            <p>{{error.message}}</p>
+            <p>{{error.stack}}</p>
+          </li>
+        {{/each}}
+      </ul>
+    {{/if}}
   </div>
 </div>

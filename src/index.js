@@ -54,6 +54,10 @@ function getMediaPath(path, type) {
   return `https://uirecorder.s3.amazonaws.com/assets/${path}${extension}`
 }
 
+function getShotDomain() {
+  return process.env.NODE_ENV === 'production' ? 'uxshot.com' : `localhost:${port}`
+}
+
 app.use((req, res, next) => {
   if (process.env.NODE_ENV === 'production') {
     if (req.get('X-Forwarded-Proto') === 'http') {
@@ -77,16 +81,25 @@ app.get('/:slug', async function (req, res) {
     res.sendStatus(404);
     return;
   }
+
+  let errors = [];
+  try {
+    errors = JSON.parse(shot.errors);
+  } catch(err) {
+
+  }
+
   res.render('shot', {
     ...shot,
     isVideo: shot.type === 'video',
     src: getMediaPath(req.params.slug, shot.type),
     description: DOMPurify.sanitize(shot.description),
+    errors
   })
 });
 
 app.post('/upload', upload.single('media'), (req, res) => {
-  const {mediaType, media, description = null} = req.body;
+  const {mediaType, media, description = null, errors = ''} = req.body;
 
   const type = mediaType === 'video' ? 'video' : 'image';
 
@@ -96,26 +109,26 @@ app.post('/upload', upload.single('media'), (req, res) => {
 
   const extension = isVideo ? '.webm' : '.png'
 
-   const params = {
+  const params = {
     ACL: "public-read", 
     Body: req.file.buffer, 
     Bucket: "uirecorder", 
     Key: `assets/${slug}${extension}`,
     ContentType: isVideo ? 'video/webm' : 'image/png',
-   };
+  };
 
-   s3.putObject(params, async function(err, data) {
+  s3.putObject(params, async function(err, data) {
     if (err) {
       res.sendStatus(500);
     }else{
-      await query(`insert into shots (type, description, slug) values(?,?,?)`, [type, description, slug]);
+      await query(`insert into shots (type, description, slug, errors) values(?,?,?,?)`, [type, description, slug, errors]);
       res.json({
         data: {
-          url: `uxshot.com/${slug}`
+          url: `${getShotDomain()}/${slug}`
         }
       });
     }
-   });
+  });
 
 });
 

@@ -1,4 +1,6 @@
 import knexLib from 'knex';
+import dotenv from 'dotenv';
+dotenv.config();
 
 export const knex = knexLib({
   client: 'mysql',
