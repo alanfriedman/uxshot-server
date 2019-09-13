@@ -12,6 +12,7 @@ import {query} from './db/index.js';
 import exphbs from 'express-handlebars';
 import createDOMPurify from 'dompurify';
 import jsdom from 'jsdom';
+import pathLib from 'path';
 
 const jsDomWindow = (new jsdom.JSDOM('')).window;
 const DOMPurify = createDOMPurify(jsDomWindow);
@@ -24,6 +25,8 @@ app.use(cookieParser())
 
 app.use(express.json()) // for parsing application/json
 app.use(express.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+
+const {S3_BUCKET_NAME: s3BucketName = '', S3_FILE_PATH: s3FilePath = ''} = process.env;
 
 app.engine(
   'hbs',
@@ -51,7 +54,7 @@ const upload = multer({storage });
 
 function getMediaPath(path, type) {
   const extension = type === 'video' ? '.webm' : '.png'
-  return `https://uirecorder.s3.amazonaws.com/assets/${path}${extension}`
+  return `https://${s3BucketName}.s3.amazonaws.com/${pathLib.join(s3FilePath, `${path}${extension}`)}`
 }
 
 function getShotDomain() {
@@ -112,8 +115,8 @@ app.post('/upload', upload.single('media'), (req, res) => {
   const params = {
     ACL: "public-read", 
     Body: req.file.buffer, 
-    Bucket: "uirecorder", 
-    Key: `assets/${slug}${extension}`,
+    Bucket: s3BucketName, 
+    Key: pathLib.join(s3FilePath, `${slug}${extension}`),
     ContentType: isVideo ? 'video/webm' : 'image/png',
   };
 
